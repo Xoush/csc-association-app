@@ -19,7 +19,7 @@ app.use(express.json());
 
 ///////////////////////// PLANIFICATION /////////////////////////////
 // On importe la fonction qui va replanifier toutes les notifications à envoyer plus tard
-const scheduleAllPendingNotifications = require('./schedulePending');
+const scheduleAllPendingNotifications = require('./planificationDate/schedulePending');
 
 ///////////////////////// ROUTES DE L’API /////////////////////////////
 // On importe les différents fichiers de routes (gestion des utilisateurs, notifications, authentification)
