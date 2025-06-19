@@ -1,27 +1,31 @@
+//modifier tout enfant en Enfance
+
 const mongoose = require('mongoose');
+const Notification = require('./models/notificationModel') // adapte le chemin si besoin
+require('dotenv').config(); // Charger .env si tu as un .env avec MONGODB_URI
 
-const uri = 'mongodb://localhost:27017/notifications-app'; // remplace par ton URI MongoDB
+mongoose.connect(process.env.MONGODB_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+});
 
-const notificationSchema = new mongoose.Schema({
-  targetGroups: [String],
-}, { collection: 'notifications' }); // Assure-toi que c'est bien le nom de ta collection
 
-const Notification = mongoose.model('Notification', notificationSchema);
+mongoose.connect(process.env.MONGODB_URI);
 
-async function showGroups() {
+const normalizeGroups = async () => {
   try {
-    await mongoose.connect(uri);
-    console.log('Connecté à MongoDB');
+    const result = await Notification.updateMany(
+      { targetGroups: 'Enfence/réseau ' }, // filtre tous ceux avec "Enfant"
+      { $set: { 'targetGroups.$': 'Enfance' } } // remplace "Enfant" par "Enfance"
+    );
 
-    // Trouver les groupes distincts
-    const groups = await Notification.distinct('targetGroups');
-    console.log('Groupes distincts dans les notifications :');
-    console.log(groups);
-
-    await mongoose.disconnect();
+    console.log(`✅ ${result.modifiedCount} document(s) modifié(s).`);
   } catch (err) {
-    console.error('Erreur :', err);
+    console.error('❌ Erreur lors de la mise à jour :', err);
+  } finally {
+    mongoose.connection.close();
   }
-}
+};
 
-showGroups();
+normalizeGroups();
+

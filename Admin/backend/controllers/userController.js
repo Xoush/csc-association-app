@@ -13,7 +13,7 @@ const User = require('../models/userModel');
 function determineGroup(age) {
   if (age >= 26) return 'Familles';
   else if (age >= 12) return 'Jeunesse';
-  else if (age >= 6) return 'Enfence/Réseau';
+  else if (age >= 6) return 'Enfance';
   else return null;
 }
 
@@ -126,7 +126,7 @@ exports.getUsersByGroup = async (req, res) => {
   try {
     const { groupName } = req.params;
     const users = await User.find({ group: groupName }).select(
-      'firstName lastName birthdate group profilePicture'
+      'firstName lastName birthdate group profilePicture phone'
     );
     res.status(200).json(users);
   } catch (err) {
